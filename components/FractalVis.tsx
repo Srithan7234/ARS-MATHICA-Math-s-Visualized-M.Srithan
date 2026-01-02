@@ -231,7 +231,7 @@ export const FractalVis = forwardRef<FractalVisRef, FractalVisProps>(({
     const composer = new EffectComposer(renderer);
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.8, 0.2, 0.8); // Slightly reduced bloom strength
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.4, 0.2, 0.8);
     composer.addPass(bloomPass);
     composerRef.current = composer;
     
