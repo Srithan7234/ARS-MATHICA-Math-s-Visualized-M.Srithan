@@ -1,0 +1,8 @@
+{
+  "name": "ARS MATHICA 2.0",
+  "description": "A viral-style interactive particle system combining 3D Mandelbulb and 2D Julia sets.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
