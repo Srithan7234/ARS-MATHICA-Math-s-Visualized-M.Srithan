@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Smartphone, Clapperboard, HeartPulse, TreePine, Image, CloudDrizzle, Gamepad2, Mountain, Wifi, Brain, Building, Telescope, Lock, Sigma, Music, Milestone, Car, Droplets, Network, Snowflake, Globe, Lightbulb, TestTube, Factory } from 'lucide-react';
+import { Smartphone, Clapperboard, HeartPulse, TreePine, Image, CloudDrizzle, Gamepad2, Mountain, Wifi, Brain, Building, Telescope, Lock, Sigma, Music, Milestone, Car, Droplets, Network, Snowflake, Lightbulb, TestTube, Factory } from 'lucide-react';
 import { APPLICATIONS_DATA } from '../src/data/applications.tsx';
 
 interface Application {
