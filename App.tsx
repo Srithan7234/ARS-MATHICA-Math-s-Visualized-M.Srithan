@@ -4,8 +4,9 @@ import { FractalVis, FractalVisRef } from './components/FractalVis';
 import { AlgorithmicArt, AlgorithmicArtRef, ArtPatternType, ColorScheme } from './components/AlgorithmicArt';
 import { DetectAndPaint } from './components/DetectAndPaint'; 
 import { CommunityGallery } from './components/CommunityGallery'; 
-import { Settings } from './components/Settings'; 
+import { Settings } from './components/Settings';
 import { TutorialModal } from './components/TutorialModal';
+import ApplicationsModal from './components/ApplicationsModal';
 import { FractalMode, AnimationPreset, MusicPreset, AudioSource } from './types';
 import { getFractalInsight } from './services/geminiService';
 import { audioService } from './services/audioService';
@@ -152,6 +153,7 @@ const App: React.FC = () => {
   
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isApplicationsOpen, setIsApplicationsOpen] = useState(false);
 
   const is2DMode = mode === FractalMode.JULIA_2D || mode === FractalMode.MANDELBROT || mode === FractalMode.TRICORN || mode === FractalMode.BURNING_SHIP;
   const is3DMode = mode === FractalMode.MANDELBULB_3D || mode === FractalMode.MENGER_SPONGE || mode === FractalMode.SIERPINSKI;
@@ -269,6 +271,39 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-black text-gray-300 font-sans selection:bg-purple-500/30 selection:text-white overflow-hidden relative">
+      <button
+        id="applications-section-btn"
+        onClick={() => setIsApplicationsOpen(true)}
+        style={{
+          position: 'absolute',
+          top: '220px',
+          right: '20px',
+          padding: '12px 20px',
+          background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(17, 153, 142, 0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          zIndex: 1000,
+        }}
+      >
+        <span>🌍</span>
+        <span>Real-World Applications</span>
+      </button>
+      <style>
+      {`
+        #applications-section-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(17, 153, 142, 0.6);
+        }
+      `}
+      </style>
       
       {/* Global Navigation Sidebar */}
       <aside className="w-[100px] bg-black border-r border-white/10 flex flex-col items-center py-6 gap-2 shrink-0 z-50 shadow-2xl">
@@ -290,6 +325,7 @@ const App: React.FC = () => {
       {/* --- ALL MODALS --- */}
       <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} type="TUTORIAL" />
       <TutorialModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} type="HELP" />
+      <ApplicationsModal isOpen={isApplicationsOpen} onClose={() => setIsApplicationsOpen(false)} />
 
       {/* Explorer Specific Headers & Main */}
       {activeTab === 'EXPLORER' && (
