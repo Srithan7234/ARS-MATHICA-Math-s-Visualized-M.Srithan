@@ -1,5 +1,4 @@
 
-
 import { GoogleGenAI } from "@google/genai";
 
 // Using process.env.API_KEY as per strict coding guidelines
@@ -22,8 +21,9 @@ export const getFractalInsight = async (mode: string, params: string): Promise<s
       Do not use markdown. Keep it raw and mysterious.
     `;
 
+    // FIX: Using gemini-3-flash-preview for general text tasks
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
     });
     return response.text?.trim() || "The void is silent.";
@@ -50,8 +50,9 @@ export const analyzeFractalPattern = async (imageBase64: string): Promise<any> =
     `;
 
     try {
+        // FIX: Using gemini-3-pro-preview for complex reasoning and coding tasks
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3-pro-preview',
             contents: {
                 parts: [
                     { inlineData: { mimeType: 'image/png', data: imageBase64.split(',')[1] } },
@@ -95,8 +96,9 @@ export const optimizePrompt = async (originalPrompt: string): Promise<string> =>
     `;
 
     try {
+        // FIX: Using gemini-3-flash-preview for prompt optimization
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3-flash-preview',
             contents: prompt,
         });
         return response.text?.trim() || originalPrompt;
@@ -174,6 +176,7 @@ export const generateFractalArt = async (prompt: string, style: string, imageSiz
         } catch (proError: any) {
              console.warn("Pro model failed, falling back to Flash...", proError.message);
              // Note: Fallback ignores imageSize as Flash usually doesn't support it or uses default
+             // FIX: Using gemini-2.5-flash-image for general image generation tasks
              return await tryGenerate('gemini-2.5-flash-image');
         }
 
