@@ -99,21 +99,6 @@ const ART_PRESETS = [
 ];
 
 const App: React.FC = () => {
-  const [apiKeySelected, setApiKeySelected] = useState(false);
-
-  useEffect(() => {
-    const checkKey = async () => {
-      const hasKey = await (window as any).aistudio.hasSelectedApiKey();
-      setApiKeySelected(hasKey);
-    };
-    checkKey();
-  }, []);
-
-  const handleSelectKey = async () => {
-    await (window as any).aistudio.openSelectKey();
-    setApiKeySelected(true);
-  };
-
   const [activeTab, setActiveTab] = useState('EXPLORER');
 
   const [mode, setMode] = useState<FractalMode>(FractalMode.JULIA_2D);
@@ -263,31 +248,6 @@ const App: React.FC = () => {
           </div>
       </div>
   );
-
-  if (!apiKeySelected) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-black text-white p-8 font-sans">
-        <div className="max-w-md w-full bg-[#0c0d15] border border-white/10 rounded-3xl p-8 text-center shadow-2xl">
-          <div className="w-20 h-20 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Key className="text-purple-400" size={40} />
-          </div>
-          <h1 className="text-2xl font-bold mb-4 font-[Orbitron]">API Key Required</h1>
-          <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-            To access high-quality image generation and complex mathematical analysis, you must select an API key from a paid Google Cloud project.
-          </p>
-          <div className="space-y-4">
-            <button
-              onClick={handleSelectKey}
-              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-sm hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all transform hover:-translate-y-0.5"
-            >
-              Select API Key
-            </button>
-            <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="block text-xs text-gray-500 hover:text-purple-400 transition-colors">Learn about Gemini API billing</a>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // SPECIAL IMMERSIVE MODE FOR TIMELINE
   if (activeTab === 'TIMELINE') {
