@@ -1,11 +1,48 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Upload, Sparkles, Brain, Wand2, RefreshCw, Download, Share2, 
-  Target, Info, AlertCircle, Scan, Palette, Maximize, X, Image as ImageIcon, Image, Key, Layers
+  Target, Info, AlertCircle, Scan, Palette, Maximize, X, Image as ImageIcon, Image, Key, Layers, Copy, Check
 } from 'lucide-react';
 import { analyzeFractalPattern, generateFractalArt, optimizePrompt } from '../services/geminiService';
 
 type ToolMode = 'DETECT' | 'PAINT';
+
+/**
+ * MathRenderer component for high-quality LaTeX rendering using KaTeX.
+ * Specifically styled for the exhibition-ready mathematical look.
+ */
+const MathRenderer: React.FC<{ latex: string }> = ({ latex }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // KaTeX requires standards mode to work correctly (document.compatMode === "CSS1Compat")
+    if (containerRef.current && (window as any).katex) {
+      try {
+        (window as any).katex.render(latex, containerRef.current, {
+          throwOnError: false,
+          displayMode: true,
+          trust: true,
+          strict: false
+        });
+      } catch (err) {
+        console.error('KaTeX rendering error:', err);
+        containerRef.current.textContent = latex;
+      }
+    }
+  }, [latex]);
+
+  return (
+    <div 
+      ref={containerRef} 
+      className="py-4 px-6 overflow-x-auto custom-scrollbar flex justify-center items-center min-h-[120px] w-full"
+      style={{ 
+        fontFamily: "'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif",
+        fontSize: '1.5rem',
+        letterSpacing: '0.05em'
+      }} 
+    />
+  );
+};
 
 export const DetectAndPaint: React.FC = () => {
   const [mode, setMode] = useState<ToolMode>('DETECT');
@@ -14,6 +51,7 @@ export const DetectAndPaint: React.FC = () => {
   const [detectImage, setDetectImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
   
   // --- PAINT STATE ---
   const [paintImage, setPaintImage] = useState<string | null>(null); // Reference image
@@ -61,6 +99,14 @@ export const DetectAndPaint: React.FC = () => {
       }
   };
 
+  const handleCopyLatex = () => {
+      if (analysisResult?.primaryEquation) {
+          navigator.clipboard.writeText(analysisResult.primaryEquation);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+      }
+  };
+
   const handleOptimizePrompt = async () => {
       if (!prompt) return;
       setIsOptimizing(true);
@@ -73,7 +119,6 @@ export const DetectAndPaint: React.FC = () => {
           setTimeout(() => setStatusMsg(""), 2000);
       } catch (e: any) {
           console.error(e);
-          // Fail silently or show minor toast, keep original prompt
       } finally {
           setIsOptimizing(false);
       }
@@ -232,9 +277,22 @@ export const DetectAndPaint: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="bg-black/40 rounded-xl p-4 border border-white/5 font-mono text-sm text-green-400 relative group cursor-pointer hover:bg-black/60 transition-colors">
-                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-xs text-gray-500">Copy LaTeX</div>
-                                        {analysisResult.primaryEquation}
+                                    <div className="bg-black/60 rounded-xl p-6 border border-white/10 relative group hover:border-cyan-500/30 transition-all shadow-[inset_0_0_20px_rgba(0,255,255,0.05)]">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                <Target size={12} className="text-cyan-400" /> Primary Equation
+                                            </div>
+                                            <button 
+                                                onClick={handleCopyLatex}
+                                                className="p-1.5 hover:bg-white/10 rounded transition-colors text-gray-400 hover:text-white"
+                                                title="Copy LaTeX"
+                                            >
+                                                {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+                                            </button>
+                                        </div>
+                                        <div className="bg-gradient-to-br from-white/5 to-white/[0.02] rounded-lg border border-white/10 overflow-hidden flex items-center justify-center">
+                                            <MathRenderer latex={analysisResult.primaryEquation} />
+                                        </div>
                                     </div>
 
                                     <p className="text-sm text-gray-400 leading-relaxed italic bg-[#1e1f2e]/50 p-4 rounded-lg border border-white/5">
