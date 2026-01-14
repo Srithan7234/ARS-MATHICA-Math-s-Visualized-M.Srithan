@@ -18,7 +18,7 @@
         background-color: #000000;
         color: #ffffff;
         font-family: 'Inter', sans-serif;
-        overflow: hidden;
+        /* overflow: hidden; */ /* This can sometimes cause issues with scroll detection in certain environments */
       }
       canvas {
         display: block;
@@ -41,21 +41,9 @@
         background: rgba(168, 85, 247, 0.5);
       }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "three/": "https://aistudiocdn.com/three@^0.181.2/",
-    "three": "https://aistudiocdn.com/three@^0.181.2",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0"
-  }
-}
-</script>
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
